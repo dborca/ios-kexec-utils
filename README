@@ -20,3 +20,22 @@ Using these utilities in unison will let you do awesome things.
 
 (This is one of the last public projects I will push for now.
  Personal reasons, mainly stress related.)
+
+
+Example usage:
+==============
+
+Extract, decrypt and patch the necessary files:
+    user@Linux$ ./fwpatch.sh
+
+Copy loader files to iPhone:
+    user@Linux$ scp kloader iBSS.n90ap.RELEASE.pwn mobile@iPhone:/var/mobile/
+
+Run kloader:
+    root@iPhone:/var/mobile# ./kloader iBSS.n90ap.RELEASE.pwn
+
+Wait for device to enter DFU mode, and then send iBEC:
+    root@Linux# irecovery -f iBEC.n90ap.RELEASE.dfu.pwn
+
+Wait for device to enter Recovery mode and bootstrap:
+    root@Linux# irecovery -b bootstrap.irs
