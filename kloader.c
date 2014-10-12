@@ -936,11 +936,6 @@ int main(int argc, char *argv[])
 #endif
 
     /*
-     * generate TTEs. 
-     */
-    generate_ttb_entries();
-
-    /*
      * get kernel base. 
      */
     kernel_base = get_kernel_base();
@@ -1002,6 +997,17 @@ int main(int argc, char *argv[])
     uint32_t tte_phys = part->tte_phys;
 
     printf("kernel pmap details: tte_virt: 0x%08x tte_phys: 0x%08x\n", tte_virt, tte_phys);
+#if IOS7HAX
+    if (PHYS_OFF != (tte_phys & ~0xFFFFFFF)) {
+        printf("physOff 0x%08x should be 0x%08x\n", PHYS_OFF, tte_phys & ~0xFFFFFFF);
+        return -1;
+    }
+#endif
+
+    /*
+     * generate TTEs. 
+     */
+    generate_ttb_entries();
 
     /*
      * Now, we can start reading at the TTE base and start writing in the descriptors. 
