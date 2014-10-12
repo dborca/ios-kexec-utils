@@ -235,13 +235,13 @@ static inline int round_up(int n, int m)
     return (n + m - 1) & ~(m - 1);
 }
 
-static void *image3_reserve_version(uint32_t tag, uint32_t length)
+static void *image3_reserve_version(uint32_t tag, uint32_t length, uint32_t padding)
 {
     uint32_t size, len;
     Image3Header* header;
 
     /* Make it even */
-    len = (uint32_t)round_up(length + sizeof(Image3Header), 2);
+    len = (uint32_t)round_up(length + padding + sizeof(Image3Header), 2);
     size = (uint32_t)round_up(image3core.rootHeader->header.size + len, 16);
     
     /* Padding */
@@ -396,10 +396,10 @@ static void create_image(void)
 
         void* version;
         uint32_t *length;
-        version = image3_reserve_version(kImage3TagVersion, (uint32_t)strlen(imageVersion) + 4);
+        version = image3_reserve_version(kImage3TagVersion, (uint32_t)strlen(imageVersion) + 4, 16);
         length = (uint32_t*)version;
         *(length) = (uint32_t)strlen(imageVersion);
-        strncpy((char*)version + sizeof(uint32_t), imageVersion, strlen(imageVersion));
+        strncpy((char*)version + sizeof(uint32_t), imageVersion, strlen(imageVersion) + 16);
     }
     
     if(imageSecurityEpoch) {
