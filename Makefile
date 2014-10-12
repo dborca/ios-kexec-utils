@@ -5,7 +5,7 @@ LDID	=	ldid
 SFLAGS	=	-Stfp0.plist
 SDKROOT	=	/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/
 CC	=	xcrun -sdk iphoneos clang -arch armv7
-CFLAGS	=	-no-integrated-as -DINLINE_IT_ALL
+CFLAGS	=	-no-integrated-as -DINLINE_IT_ALL -DIOS7HAX
 LDFLAGS	=	-miphoneos-version-min=6.0 -framework IOKit -framework CoreFoundation
 
 all:	multi_kloader kloader ibsspatch img3maker

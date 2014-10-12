@@ -815,8 +815,25 @@ vm_address_t get_kernel_base()
         ret = vm_region_recurse_64(kernel_task, &addr, &size, &depth, (vm_region_info_t) & info, &info_count);
         if (ret != KERN_SUCCESS)
             break;
-        if (size > 1024 * 1024 * 1024)
+        if (size > 1024 * 1024 * 1024) {
+#if IOS7HAX
+            /*
+             * hax, sometimes on iOS7 kernel starts at +0x200000 in the 1Gb region
+             */
+            pointer_t buf;
+            mach_msg_type_number_t sz = 0;
+            addr += 0x200000;
+            vm_read(kernel_task, addr + 0x1000, 512, &buf, &sz);
+            if (*((uint32_t *)buf) != 0xfeedface) {
+                addr -= 0x200000;
+                vm_read(kernel_task, addr + 0x1000, 512, &buf, &sz);
+                if (*((uint32_t*)buf) != 0xfeedface) {
+                    break;
+                }
+            }
+#endif
             return addr;
+        }
         addr += size;
     }
 
