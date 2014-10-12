@@ -110,7 +110,7 @@ static mach_port_t kernel_task = 0;
 static uint32_t ttb_template[TTB_SIZE] = { };
 
 static void *ttb_template_ptr = &ttb_template[0];
-static uint32_t kernel_base = DEFAULT_KERNEL_SLIDE;
+static vm_address_t kernel_base = DEFAULT_KERNEL_SLIDE;
 
 typedef struct pmap_partial_t {
     uint32_t tte_virt;
@@ -805,11 +805,11 @@ vm_address_t get_kernel_base()
     vm_size_t size;
     mach_msg_type_number_t info_count = VM_REGION_SUBMAP_INFO_COUNT_64;
     unsigned int depth = 0;
-    vm_address_t addr = 0x81200000;
+    vm_address_t addr = 0x81200000; /* arm64: addr = 0xffffff8000000000; ??? */
 
     ret = task_for_pid(mach_task_self(), 0, &kernel_task);
     if (ret != KERN_SUCCESS)
-        return 0;
+        return -1;
 
     while (1) {
         ret = vm_region_recurse_64(kernel_task, &addr, &size, &depth, (vm_region_info_t) & info, &info_count);
@@ -820,7 +820,7 @@ vm_address_t get_kernel_base()
         addr += size;
     }
 
-    return 0;
+    return -1;
 }
 
 static void generate_ttb_entries(void)
@@ -946,7 +946,7 @@ int main(int argc, char *argv[])
     /*
      * kill 
      */
-    uint32_t addr = kernel_base + 0x1000, e = 0, sz = 0;
+    vm_address_t addr = kernel_base + 0x1000, e = 0, sz = 0;
     uint8_t *p = malloc(DMPSIZE + 0x1000);
     pointer_t buf;
 
