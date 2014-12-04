@@ -1101,13 +1101,17 @@ int main(int argc, char *argv[])
     sleep(1);
 
 #else
+
+    static uint32_t arm[2] = { 0xe51ff004, 0x9fe00000 };
+    arm[1] = phys_addr_remap;
     // Requires D-cache writeback.
-    printf("Tramp %x COMMMAP\n", larm_init_tramp - kernel_base + SHADOWMAP_BEGIN);
-    printf("%x, %x\n", *(uintptr_t *) (0x7f000000 + (larm_init_tramp - kernel_base)), *(uintptr_t *) (0x7f000000 + (larm_init_tramp - kernel_base) + 4));
+    printf("Tramp %x COMMMAP\n", larm_init_tramp);
+    printf("%x, %x\n", *(uintptr_t *) (larm_init_tramp), *(uintptr_t *) (larm_init_tramp + 4));
     printf("%x\n", *(uint32_t *) (0x7f000000 + 0x1000));
-    bcopy((void *) arm, (void *) 0x7f000000 + (larm_init_tramp - kernel_base), sizeof(arm));
-    printf("%x, %x\n", *(uintptr_t *) (0x7f000000 + (larm_init_tramp - kernel_base)), *(uintptr_t *) (0x7f000000 + (larm_init_tramp - kernel_base) + 4));
+    bcopy((void *) arm, (void *) larm_init_tramp, sizeof(arm));
+    printf("%x, %x\n", *(uintptr_t *) (larm_init_tramp), *(uintptr_t *) (larm_init_tramp + 4));
     printf("%x\n", *(uint32_t *) (0x7f000000 + 0x1000));
+
 #endif
 
     while (1) {
