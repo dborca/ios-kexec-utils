@@ -1100,10 +1100,10 @@ int main(int argc, char *argv[])
     arm[1] = phys_addr_remap;
     // Requires D-cache writeback.
     printf("Tramp %x COMMMAP\n", larm_init_tramp);
-    printf("%x, %x\n", *(uintptr_t *) (larm_init_tramp), *(uintptr_t *) (larm_init_tramp + 4));
+    printf("%lx, %lx\n", *(uintptr_t *) (larm_init_tramp), *(uintptr_t *) (larm_init_tramp + 4));
     printf("%x\n", *(uint32_t *) (0x7f000000 + 0x1000));
     bcopy((void *) arm, (void *) larm_init_tramp, sizeof(arm));
-    printf("%x, %x\n", *(uintptr_t *) (larm_init_tramp), *(uintptr_t *) (larm_init_tramp + 4));
+    printf("%lx, %lx\n", *(uintptr_t *) (larm_init_tramp), *(uintptr_t *) (larm_init_tramp + 4));
     printf("%x\n", *(uint32_t *) (0x7f000000 + 0x1000));
 
 #endif
