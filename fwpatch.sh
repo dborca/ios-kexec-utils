@@ -28,11 +28,11 @@ iboot_patcher iBSS.n90ap.RELEASE.dec iBSS.n90ap.RELEASE.pwn
 xpwntool iBEC.n90ap.RELEASE.dfu iBEC.n90ap.RELEASE.dec \
     -iv ca528426065da305c19476477a39ed18 \
     -k 3273904a1cfd111a20d6a53f2636902db1193dad5f0acf3837dd7c79fb3b795f
-iboot_patcher iBEC.n90ap.RELEASE.dec iBEC.n90ap.RELEASE.pwn
-sed -i 's|-v amfi=0xff cs_enforcement_disable=1 |-v                                    |' iBEC.n90ap.RELEASE.pwn
-img3maker -b 0 -y 8930 -s s5l8930x \
-    -f iBEC.n90ap.RELEASE.pwn -o iBEC.n90ap.RELEASE.dfu.pwn \
-    -t ibec -v `grep -ao 'iBoot-[0-9.]*' iBEC.n90ap.RELEASE.dfu`
+iboot_patcher iBEC.n90ap.RELEASE.dec iBEC.n90ap.RELEASE.patched
+
+#Add header back to iBEC
+xpwntool iBEC.n90ap.RELEASE.patched iBEC.n90ap.RELEASE.pwn \
+    -t iBEC.n90ap.RLEASE.dfu
 
 # Create batchfile for irecovery:
 cat <<EOF > bootstrap.irs
